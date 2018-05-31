@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+</head>
+
+<body>
+  <h1>Bitcoin price</h1>
+
+  <div id="bitcoin-price"></div>
+
+  <script>
+
+
+    var request = require('request');
+
+    function newPrice() {
+      request('http://api.coindesk.com/v1/bpi/currentprice.json', function (error, response, body) {
+        body = JSON.parse(body);
+        // console.log(body);
+        // newPrice = body;
+        var currentPrice = body.bpi.USD.rate;
+        // var BTC = currentPrice.slice(0, 5);
+        document.getElementById('bitcoin-price').innerHTML = "$ " + currentPrice.slice(0, 5);
+      });
+    }
+
+    newPrice();
+
+    setInterval(function () {
+      newPrice();
+    }, 60000);
+  </script>
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+</body>
+
+</html>
