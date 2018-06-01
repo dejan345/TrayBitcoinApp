@@ -1,5 +1,9 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, nativeImage } = require('electron');
+const path = require('path');
+const assetsDirectory = path.join(__dirname, 'assets');
+let tray = undefined;
+let window = undefined;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -27,7 +31,20 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// app.on('ready', createWindow);
+
+const createTray = () => {
+  const trayIcon = path.join(__dirname, 'sunTemplate.png');
+  const nimage = nativeImage.createFromPath(trayIcon);
+  const tray = new Tray(nimage);
+  let bc_api = 'https://api.coinmarketcap.com/v1/ticker/?limit=10';
+  tray.setTitle('Hello');
+};
+
+app.on('ready', () => {
+  createTray();
+  createWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
